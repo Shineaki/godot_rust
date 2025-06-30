@@ -1,0 +1,168 @@
+[gd_scene load_steps=18 format=3 uid="uid://m4v7xo7f5kgf"]
+
+[ext_resource type="Texture2D" uid="uid://b04ketdcqsroi" path="res://Assets/dungeon/frames/knight_f_hit_anim_f0.png" id="1_kx406"]
+[ext_resource type="Script" uid="uid://bygqqxd3t3jau" path="res://character.gd" id="1_kxv2x"]
+[ext_resource type="Texture2D" uid="uid://c33qf5mcgxy7f" path="res://Assets/dungeon/frames/knight_f_idle_anim_f0.png" id="2_b014i"]
+[ext_resource type="Texture2D" uid="uid://doighdsskcpc2" path="res://Assets/dungeon/frames/knight_f_idle_anim_f1.png" id="3_kxv2x"]
+[ext_resource type="Texture2D" uid="uid://bgo63yx82kqts" path="res://Assets/dungeon/frames/knight_f_idle_anim_f2.png" id="4_k17t1"]
+[ext_resource type="Texture2D" uid="uid://1gnyhp1vhd22" path="res://Assets/dungeon/frames/knight_f_idle_anim_f3.png" id="5_0var5"]
+[ext_resource type="Texture2D" uid="uid://wgjiyabgoay8" path="res://Assets/dungeon/frames/knight_f_run_anim_f0.png" id="6_36d8b"]
+[ext_resource type="Texture2D" uid="uid://dxlfigxxshp1x" path="res://Assets/dungeon/frames/knight_f_run_anim_f1.png" id="7_rbaxm"]
+[ext_resource type="Texture2D" uid="uid://b2ancw62paqat" path="res://Assets/dungeon/frames/knight_f_run_anim_f2.png" id="8_i2jby"]
+[ext_resource type="Texture2D" uid="uid://dcsneajx4w78b" path="res://Assets/dungeon/frames/knight_f_run_anim_f3.png" id="9_i8md4"]
+[ext_resource type="Texture2D" uid="uid://yr5sih2n3ebu" path="res://Assets/dungeon/sword.png" id="11_k17t1"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7lurk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kx406")
+}],
+"loop": true,
+"name": &"Hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_b014i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_kxv2x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_k17t1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_0var5")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_36d8b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_rbaxm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_i2jby")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_i8md4")
+}],
+"loop": true,
+"name": &"Moving",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bhy7r"]
+radius = 5.0
+height = 14.0
+
+[sub_resource type="Animation" id="Animation_0var5"]
+resource_name = "Attack"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, -5), Vector2(-1.5, -1.5), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-0.785398, 3.14159, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_36d8b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rbaxm"]
+_data = {
+&"Attack": SubResource("Animation_0var5"),
+&"RESET": SubResource("Animation_36d8b")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kxv2x"]
+radius = 11.065
+
+[node name="Character" type="CharacterBody2D"]
+script = ExtResource("1_kxv2x")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_7lurk")
+animation = &"Idle"
+autoplay = "Idle"
+frame_progress = 0.66687
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 7)
+shape = SubResource("CapsuleShape2D_bhy7r")
+
+[node name="Hands" type="Node2D" parent="."]
+
+[node name="RightHandPosition" type="Node2D" parent="Hands"]
+position = Vector2(7, 10)
+
+[node name="Sprite2D" type="Sprite2D" parent="Hands/RightHandPosition"]
+texture = ExtResource("11_k17t1")
+offset = Vector2(0, -16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Hands/RightHandPosition"]
+libraries = {
+&"": SubResource("AnimationLibrary_rbaxm")
+}
+
+[node name="AttackArea" type="Area2D" parent="Hands/RightHandPosition"]
+position = Vector2(0.435, -3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hands/RightHandPosition/AttackArea"]
+shape = SubResource("CircleShape2D_kxv2x")
+
+[node name="LeftHandPosition" type="Node2D" parent="Hands"]
+visible = false
+position = Vector2(-7, 10)
+
+[node name="Sprite2D" type="Sprite2D" parent="Hands/LeftHandPosition"]
+texture = ExtResource("11_k17t1")
+offset = Vector2(0, -16)
