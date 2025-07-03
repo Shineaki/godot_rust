@@ -126,10 +126,11 @@ _data = {
 radius = 11.065
 
 [node name="Character" type="CharacterBody2D"]
+z_index = 1
 script = ExtResource("1_kxv2x")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-z_index = 1
+z_index = 2
 sprite_frames = SubResource("SpriteFrames_7lurk")
 animation = &"Idle"
 autoplay = "Idle"
@@ -140,6 +141,7 @@ position = Vector2(0, 7)
 shape = SubResource("CapsuleShape2D_bhy7r")
 
 [node name="Hands" type="Node2D" parent="."]
+z_index = 1
 
 [node name="RightHandPosition" type="Node2D" parent="Hands"]
 position = Vector2(7, 10)
@@ -157,6 +159,7 @@ libraries = {
 position = Vector2(0.435, -3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hands/RightHandPosition/AttackArea"]
+visible = false
 shape = SubResource("CircleShape2D_kxv2x")
 
 [node name="LeftHandPosition" type="Node2D" parent="Hands"]
