@@ -2,9 +2,9 @@ use godot::classes::INode2D;
 use godot::classes::{Node2D, TileMapLayer};
 use godot::prelude::*;
 
-use crate::rltk_map::MAPWIDTH;
 use crate::rltk_map::Map;
 use crate::rltk_map::TileType;
+use crate::rltk_map::{MAPHEIGHT, MAPWIDTH};
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
@@ -90,6 +90,14 @@ impl MapGeneratorNode {
             if xx > MAPWIDTH as i32 - 1 {
                 xx = 0;
                 yy += 1;
+            }
+        }
+        // Extra coverage around map
+        for y in -12..=MAPHEIGHT as i32 + 12 {
+            for x in -12..=MAPWIDTH as i32 + 12 {
+                if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
+                    wall_array.push(Vector2i { x: x, y: y });
+                }
             }
         }
         child_node.set_cells_terrain_connect(&wall_array, 0, 0);
