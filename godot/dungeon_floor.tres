@@ -2,9 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://byj4apk7eb11a" path="res://Assets/dungeon/atlas_floor-16x16.png" id="1_l7wll"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_og0kg"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q0ja0"]
 texture = ExtResource("1_l7wll")
 0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
 1:0/0 = 0
 2:0/0 = 0
 3:0/0 = 0
@@ -51,4 +53,7 @@ texture = ExtResource("1_l7wll")
 5:6/0 = 0
 
 [resource]
-sources/0 = SubResource("TileSetAtlasSource_og0kg")
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Terrain 0"
+terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
+sources/0 = SubResource("TileSetAtlasSource_q0ja0")
