@@ -31,7 +31,7 @@ impl MapGeneratorNode {
         let center_ref = self.map.rooms[0].center();
         Vector2 {
             x: (center_ref.0 as f32) * 16.0 + 8.0,
-            y: (center_ref.1 as f32) * 16.0,
+            y: (center_ref.1 as f32) * 16.0 + 8.0,
         }
     }
 
@@ -71,6 +71,7 @@ impl MapGeneratorNode {
         }
         child_node.set_cells_terrain_connect(&floor_array, 0, 0);
     }
+
     #[func]
     pub fn init_shadows(&mut self) {
         let mut child_node = self

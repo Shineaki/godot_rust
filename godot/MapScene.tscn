@@ -11,6 +11,7 @@ script = ExtResource("1_ptcrx")
 
 [node name="Character" parent="." instance=ExtResource("3_bb2se")]
 z_index = 5
+position = Vector2(8, 8)
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 zoom = Vector2(3, 3)

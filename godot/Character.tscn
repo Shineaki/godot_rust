@@ -125,23 +125,25 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_kxv2x"]
 radius = 11.065
 
-[node name="Character" type="CharacterBody2D"]
+[node name="Character" type="Player"]
 z_index = 1
 script = ExtResource("1_kxv2x")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 2
+position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_7lurk")
 animation = &"Idle"
 autoplay = "Idle"
 frame_progress = 0.66687
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 7)
+position = Vector2(0, -2)
 shape = SubResource("CapsuleShape2D_bhy7r")
 
 [node name="Hands" type="Node2D" parent="."]
 z_index = 1
+position = Vector2(0, -8)
 
 [node name="RightHandPosition" type="Node2D" parent="Hands"]
 position = Vector2(7, 10)

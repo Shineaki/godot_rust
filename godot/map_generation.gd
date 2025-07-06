@@ -8,8 +8,6 @@ func _ready() -> void:
 	$MyRustMap.init_shadows()
 
 func _process(delta: float) -> void:
-	var xy = $Character.position
+	var xy = $Character.position - Vector2(8, 8)
 	var rounded_xy = Vector2i(round(xy.x / 16), round(xy.y / 16))
-	print(delta)
 	$MyRustMap.generate_shadows(rounded_xy)
-	

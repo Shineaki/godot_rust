@@ -1,35 +1,67 @@
+use godot::classes::CharacterBody2D;
+use godot::classes::ICharacterBody2D;
+use godot::classes::Input;
+use godot::classes::Tween;
 use godot::prelude::*;
-use godot::classes::Sprite2D;
-use godot::classes::ISprite2D;
 
 #[derive(GodotClass)]
-#[class(base=Sprite2D)]
+#[class(base=CharacterBody2D)]
 struct Player {
     speed: f64,
-    angular_speed: f64,
-
-    base: Base<Sprite2D>
+    moving: bool,
+    target_position: Vector2i,
+    base: Base<CharacterBody2D>,
 }
 
-
 #[godot_api]
-impl ISprite2D for Player {
-    fn init(base: Base<Sprite2D>) -> Self {
+impl ICharacterBody2D for Player {
+    fn init(base: Base<CharacterBody2D>) -> Self {
         godot_print!("Hello, world!"); // Prints to the Godot console
-        
+
         Self {
-            speed: 400.0,
-            angular_speed: std::f64::consts::PI,
+            speed: 100.0,
+            moving: false,
+            target_position: Vector2i { x: 0, y: 0 },
             base,
         }
     }
 
-    fn physics_process(&mut self, delta: f64) {
-        let radians = (self.angular_speed * delta) as f32;
-        self.base_mut().rotate(radians);
+    // fn physics_process(&mut self, delta: f64) {
+    //     // if self.moving {
+    //     //     let velocity = self.base().get_global_position().direction_to(Vector2 {
+    //     //         x: self.target_position.x as f32 * 16.0 + 8.0,
+    //     //         y: self.target_position.y as f32 * 16.0 + 8.0,
+    //     //     }) * self.speed as f32;
+    //     //     self.base_mut().translate(velocity * delta as f32);
+    //     // }
+    // }
 
-        let rotation = self.base().get_rotation();
-        let velocity = Vector2::UP.rotated(rotation) * self.speed as f32;
-        self.base_mut().translate(velocity * delta as f32);
+    // fn process(&mut self, delta: f64) {
+    //     // if self.moving {
+    //     //     if self.target_position == self.global_to_tile(&self.base().get_position()) {
+    //     //         self.moving = false;
+    //     //     } else {
+    //     //         return;
+    //     //     }
+    //     // }
+    //     let input = Input::singleton();
+    //     let dir: Vector2 = input.get_vector("Move_Left", "Move_Right", "Move_Up", "Move_Down");
+    //     self.move_player(&dir);
+    //     self.base_mut().translate(dir);
+    // }
+}
+
+impl Player {
+    pub fn global_to_tile(&self, pos: &Vector2) -> Vector2i {
+        Vector2i {
+            x: (pos.x / 16.0).round() as i32,
+            y: (pos.y / 16.0).round() as i32,
+        }
+    }
+    pub fn move_player(&mut self, dir: &Vector2){
+        let glob_pos = self.base().get_global_position();
+        self.base_mut().set_global_position(
+            glob_pos + Vector2{x: dir.x * 16.0, y: dir.y * 16.0}
+        );
     }
 }
