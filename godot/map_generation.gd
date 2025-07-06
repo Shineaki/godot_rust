@@ -5,3 +5,11 @@ func _ready() -> void:
 	$MyRustMap.generate_walls()
 	var spawn_point = $MyRustMap.get_spawn_point()
 	$Character.position = spawn_point
+	$MyRustMap.init_shadows()
+
+func _process(delta: float) -> void:
+	var xy = $Character.position
+	var rounded_xy = Vector2i(round(xy.x / 16), round(xy.y / 16))
+	print(delta)
+	$MyRustMap.generate_shadows(rounded_xy)
+	

@@ -16,13 +16,11 @@ func get_input():
 
 func _process(delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
-	if $AnimatedSprite2D.flip_h == (mouse_pos.x < position.x):
-		pass
-	else:
+	if $AnimatedSprite2D.flip_h != (mouse_pos.x < position.x):
 		$Hands.scale.x *= -1
 		$AnimatedSprite2D.flip_h = mouse_pos.x < position.x
-	
-		
+	print(position)
+	print(position.x/16, " ", position.y/16)
 
 func _physics_process(delta):
 	#$Hands.look_at()

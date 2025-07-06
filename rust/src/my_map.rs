@@ -28,9 +28,9 @@ impl INode2D for MapGeneratorNode {
 impl MapGeneratorNode {
     #[func]
     pub fn get_spawn_point(&self) -> Vector2 {
-        let center_ref = self.map.rooms.get(0).unwrap().center();
+        let center_ref = self.map.rooms[0].center();
         Vector2 {
-            x: (center_ref.0 as f32) * 16.0,
+            x: (center_ref.0 as f32) * 16.0 + 8.0,
             y: (center_ref.1 as f32) * 16.0,
         }
     }
@@ -70,6 +70,46 @@ impl MapGeneratorNode {
             }
         }
         child_node.set_cells_terrain_connect(&floor_array, 0, 0);
+    }
+    #[func]
+    pub fn init_shadows(&mut self) {
+        let mut child_node = self
+            .base()
+            .try_get_node_as::<TileMapLayer>("ShadowMap")
+            .unwrap();
+        // Extra coverage around map
+        let mut shadow_array: Array<Vector2i> = Array::new();
+        for y in -12..=MAPHEIGHT as i32 + 12 {
+            for x in -12..=MAPWIDTH as i32 + 12 {
+                shadow_array.push(Vector2i { x: x, y: y });
+            }
+        }
+        child_node.set_cells_terrain_connect(&shadow_array, 0, 0);
+    }
+
+    #[func]
+    pub fn generate_shadows(&mut self, player_pos: Vector2i) {
+        self.map.update_revealed((player_pos.x, player_pos.y));
+        let mut child_node = self
+            .base()
+            .try_get_node_as::<TileMapLayer>("ShadowMap")
+            .unwrap();
+        // Extra coverage around map
+        let mut shadow_array: Array<Vector2i> = Array::new();
+
+        for y in player_pos.y - 8..=player_pos.y + 8 {
+            for x in player_pos.x - 8..=player_pos.x + 8 {
+                if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
+                    continue;
+                } else {
+                    child_node.erase_cell(Vector2i { x: x, y: y });
+                    if self.map.visible_tiles[self.map.xy_idx(x, y)] != true {
+                        shadow_array.push(Vector2i { x: x, y: y });
+                    }
+                }
+            }
+        }
+        child_node.set_cells_terrain_connect(&shadow_array, 0, 0);
     }
 
     #[func]

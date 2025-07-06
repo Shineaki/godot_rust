@@ -1,4 +1,5 @@
 use godot::prelude::*;
+use rltk::field_of_view;
 use rltk::{Algorithm2D, BaseMap, Point, RandomNumberGenerator};
 use std::cmp::{max, min};
 
@@ -71,6 +72,18 @@ impl Map {
             self.blocked[i] = *tile == TileType::Wall;
         }
     }
+    pub fn update_revealed(&mut self, play_pos: (i32, i32)) {
+        let mut visible_tiles = field_of_view(Point::new(play_pos.0, play_pos.1), 6, self);
+        visible_tiles.retain(|p| p.x >= 0 && p.x < self.width && p.y >= 0 && p.y < self.height);
+        for t in self.visible_tiles.iter_mut() {
+            *t = false
+        }
+        for vis in visible_tiles.iter() {
+            let idx: usize = self.xy_idx(vis.x, vis.y);
+            self.revealed_tiles[idx] = true;
+            self.visible_tiles[idx] = true;
+        }
+    }
 
     /// Makes a new map using the algorithm from http://rogueliketutorials.com/tutorials/tcod/part-3/
     /// This gives a handful of random rooms and corridors joining them together.
@@ -85,9 +98,9 @@ impl Map {
             blocked: vec![false; MAPCOUNT],
         };
 
-        const MAX_ROOMS: i32 = 30;
-        const MIN_SIZE: i32 = 5;
-        const MAX_SIZE: i32 = 10;
+        const MAX_ROOMS: i32 = 40;
+        const MIN_SIZE: i32 = 3;
+        const MAX_SIZE: i32 = 7;
 
         let mut rng = RandomNumberGenerator::new();
 
@@ -119,6 +132,19 @@ impl Map {
                 }
 
                 map.rooms.push(new_room);
+            }
+        }
+        // Delete single vertical walls
+        for y in 1..MAPHEIGHT as i32 - 1 {
+            for x in 1..MAPWIDTH as i32 - 1 {
+                let c_coord = map.xy_idx(x, y);
+                if map.tiles[c_coord] == TileType::Wall {
+                    if map.tiles[map.xy_idx(x - 1, y)] == TileType::Floor
+                        && map.tiles[map.xy_idx(x + 1, y)] == TileType::Floor
+                    {
+                        map.tiles[c_coord] = TileType::Floor;
+                    }
+                }
             }
         }
 

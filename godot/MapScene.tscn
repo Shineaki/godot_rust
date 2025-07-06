@@ -1,23 +1,29 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4fii47vhtknf"]
+[gd_scene load_steps=6 format=3 uid="uid://d4fii47vhtknf"]
 
 [ext_resource type="TileSet" uid="uid://c7yt0cjlpj5k1" path="res://dungeon_floor.tres" id="1_dqw6h"]
 [ext_resource type="Script" uid="uid://do1okxtu2hlf" path="res://map_generation.gd" id="1_ptcrx"]
 [ext_resource type="TileSet" uid="uid://cyahgd6524isa" path="res://dungeon_walls.tres" id="2_bb2se"]
 [ext_resource type="PackedScene" uid="uid://m4v7xo7f5kgf" path="res://Character.tscn" id="3_bb2se"]
+[ext_resource type="TileSet" uid="uid://cl2ux4a16sdca" path="res://dungeon_shadow.tres" id="5_q0ja0"]
 
 [node name="MapScene" type="Node2D"]
 script = ExtResource("1_ptcrx")
 
 [node name="Character" parent="." instance=ExtResource("3_bb2se")]
-position = Vector2(8, 0)
+z_index = 5
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 zoom = Vector2(3, 3)
 
 [node name="MyRustMap" type="MapGeneratorNode" parent="."]
 
-[node name="FloorMap" type="TileMapLayer" parent="MyRustMap"]
-tile_set = ExtResource("1_dqw6h")
+[node name="ShadowMap" type="TileMapLayer" parent="MyRustMap"]
+z_index = 2
+tile_set = ExtResource("5_q0ja0")
 
 [node name="WallMap" type="TileMapLayer" parent="MyRustMap"]
+z_index = 1
 tile_set = ExtResource("2_bb2se")
+
+[node name="FloorMap" type="TileMapLayer" parent="MyRustMap"]
+tile_set = ExtResource("1_dqw6h")
