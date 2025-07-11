@@ -29,7 +29,7 @@ pub struct Map {
 
 impl Map {
     pub fn xy_idx(&self, x: i32, y: i32) -> usize {
-        (y as usize * self.width as usize) + x as usize
+        x.wrapping_add(y.wrapping_mul(self.width)) as usize
     }
 
     fn apply_room_to_map(&mut self, room: &Rect) {

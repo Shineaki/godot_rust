@@ -6,8 +6,20 @@ func _ready() -> void:
 	var spawn_point = $MyRustMap.get_spawn_point()
 	$Character.position = spawn_point
 	$MyRustMap.init_shadows()
-
-func _process(delta: float) -> void:
-	var xy = $Character.position - Vector2(8, 8)
+	
+	var xy = spawn_point - Vector2(8, 8)
 	var rounded_xy = Vector2i(round(xy.x / 16), round(xy.y / 16))
 	$MyRustMap.generate_shadows(rounded_xy)
+	$MyRustMap.update_minimap(rounded_xy)
+	$Character.moved.connect(process_movement)
+
+func _process(delta: float) -> void:
+	pass
+	#print(delta)
+
+func process_movement():
+	var xy = $Character.position - Vector2(8, 8)
+	print("process_movement ", xy)
+	var rounded_xy = Vector2i(round(xy.x / 16), round(xy.y / 16))
+	$MyRustMap.generate_shadows(rounded_xy)
+	$MyRustMap.update_minimap(rounded_xy)

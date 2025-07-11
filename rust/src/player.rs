@@ -1,15 +1,10 @@
 use godot::classes::CharacterBody2D;
 use godot::classes::ICharacterBody2D;
-use godot::classes::Input;
-use godot::classes::Tween;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody2D)]
 struct Player {
-    speed: f64,
-    moving: bool,
-    target_position: Vector2i,
     base: Base<CharacterBody2D>,
 }
 
@@ -19,9 +14,6 @@ impl ICharacterBody2D for Player {
         godot_print!("Hello, world!"); // Prints to the Godot console
 
         Self {
-            speed: 100.0,
-            moving: false,
-            target_position: Vector2i { x: 0, y: 0 },
             base,
         }
     }
@@ -51,17 +43,17 @@ impl ICharacterBody2D for Player {
     // }
 }
 
-impl Player {
-    pub fn global_to_tile(&self, pos: &Vector2) -> Vector2i {
-        Vector2i {
-            x: (pos.x / 16.0).round() as i32,
-            y: (pos.y / 16.0).round() as i32,
-        }
-    }
-    pub fn move_player(&mut self, dir: &Vector2){
-        let glob_pos = self.base().get_global_position();
-        self.base_mut().set_global_position(
-            glob_pos + Vector2{x: dir.x * 16.0, y: dir.y * 16.0}
-        );
-    }
-}
+// impl Player {
+//     pub fn global_to_tile(&self, pos: &Vector2) -> Vector2i {
+//         Vector2i {
+//             x: (pos.x / 16.0).round() as i32,
+//             y: (pos.y / 16.0).round() as i32,
+//         }
+//     }
+//     pub fn move_player(&mut self, dir: &Vector2){
+//         let glob_pos = self.base().get_global_position();
+//         self.base_mut().set_global_position(
+//             glob_pos + Vector2{x: dir.x * 16.0, y: dir.y * 16.0}
+//         );
+//     }
+// }

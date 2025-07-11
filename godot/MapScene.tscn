@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4fii47vhtknf"]
+[gd_scene load_steps=9 format=4 uid="uid://d4fii47vhtknf"]
 
 [ext_resource type="TileSet" uid="uid://c7yt0cjlpj5k1" path="res://dungeon_floor.tres" id="1_dqw6h"]
 [ext_resource type="Script" uid="uid://do1okxtu2hlf" path="res://map_generation.gd" id="1_ptcrx"]
 [ext_resource type="TileSet" uid="uid://cyahgd6524isa" path="res://dungeon_walls.tres" id="2_bb2se"]
 [ext_resource type="PackedScene" uid="uid://m4v7xo7f5kgf" path="res://Character.tscn" id="3_bb2se"]
+[ext_resource type="Script" uid="uid://rnn6fslb3byh" path="res://ShadowMap.gd" id="4_3orfu"]
 [ext_resource type="TileSet" uid="uid://cl2ux4a16sdca" path="res://dungeon_shadow.tres" id="5_q0ja0"]
+[ext_resource type="TileSet" uid="uid://byccn7ncl4bcm" path="res://minmap.tres" id="7_4ewpg"]
+[ext_resource type="Script" uid="uid://crw413po8ue64" path="res://tile_map_layer.gd" id="8_1oqwu"]
 
 [node name="MapScene" type="Node2D"]
 script = ExtResource("1_ptcrx")
@@ -21,6 +24,7 @@ zoom = Vector2(3, 3)
 [node name="ShadowMap" type="TileMapLayer" parent="MyRustMap"]
 z_index = 2
 tile_set = ExtResource("5_q0ja0")
+script = ExtResource("4_3orfu")
 
 [node name="WallMap" type="TileMapLayer" parent="MyRustMap"]
 z_index = 1
@@ -28,3 +32,29 @@ tile_set = ExtResource("2_bb2se")
 
 [node name="FloorMap" type="TileMapLayer" parent="MyRustMap"]
 tile_set = ExtResource("1_dqw6h")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="MyRustMap"]
+visible = false
+tile_map_data = PackedByteArray("AAADAP3/AAAGAAEAAAADAPz/AAALAAIAAAADAPv/AAALAAIAAAADAPr/AAALAAIAAAADAPn/AAAGAAIAAAAGAPn/AAAJAAMAAAAFAPn/AAAJAAMAAAAEAPn/AAAJAAMAAAAHAP3/AAAFAAEAAAAHAPz/AAAIAAEAAAAHAPv/AAAIAAEAAAAHAPr/AAAIAAEAAAAHAPn/AAAFAAIAAAAEAP3/AAALAAAAAAAGAP3/AAAIAAAAAAACAPj/AAAIAAAAAAACAPn/AAAIAAEAAAACAPr/AAAIAAEAAAACAPv/AAAIAAEAAAACAPz/AAAIAAEAAAACAP3/AAAIAAEAAAAIAPj/AAALAAAAAAAHAPj/AAAKAAAAAAAGAPj/AAAKAAAAAAAFAPj/AAAKAAAAAAAEAPj/AAAKAAAAAAADAPj/AAAKAAAAAAAIAP3/AAALAAIAAAAIAPz/AAALAAIAAAAIAPv/AAALAAIAAAAIAPr/AAALAAIAAAAIAPn/AAALAAIAAAAGAP7/AAAIAAMAAAAHAP7/AAAJAAMAAAAIAP7/AAALAAMAAAACAP7/AAAIAAMAAAADAP7/AAAJAAMAAAAEAP7/AAALAAMAAAAEAPr/AAAKAAEAAAAFAPr/AAAKAAEAAAAFAPv/AAAKAAEAAAAGAPv/AAAKAAEAAAAGAPr/AAAKAAEAAAAGAPz/AAAKAAEAAAAFAPz/AAAKAAEAAAAEAPz/AAAKAAEAAAAEAPv/AAAKAAEAAAA=")
+tile_set = ExtResource("7_4ewpg")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+custom_minimum_size = Vector2(200, 129.325)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -129.0
+offset_bottom = 74.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+
+[node name="TileMapLayer" type="TileMapLayer" parent="UI/MarginContainer/PanelContainer"]
+position = Vector2(3, 3)
+tile_set = ExtResource("7_4ewpg")
+script = ExtResource("8_1oqwu")

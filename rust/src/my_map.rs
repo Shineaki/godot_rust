@@ -114,6 +114,47 @@ impl MapGeneratorNode {
     }
 
     #[func]
+    pub fn update_minimap(&self, player_pos: Vector2i) {
+        let mut minimap = self
+            .base()
+            .try_get_node_as::<TileMapLayer>("../UI/MarginContainer/PanelContainer/TileMapLayer")
+            .unwrap();
+        let mut wall_array: Array<Vector2i> = Array::new();
+        let mut floor_array: Array<Vector2i> = Array::new();
+        let mut minimap_x = 0;
+        let mut minimap_y = 0;
+        for y in player_pos.y - 18..=player_pos.y + 18 {
+            for x in player_pos.x - 30..=player_pos.x + 30 {
+                minimap.erase_cell(Vector2i { x: minimap_x, y: minimap_y });
+                if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32{
+                    minimap_x = minimap_x.wrapping_add(1);
+                    continue;
+                }
+                let c_pos = self.map.xy_idx(x, y);
+                if self.map.revealed_tiles[c_pos] == true {
+                    if self.map.tiles[c_pos] == TileType::Wall {
+                        wall_array.push(Vector2i {
+                            x: minimap_x,
+                            y: minimap_y,
+                        });
+                    } else {
+                        floor_array.push(Vector2i {
+                            x: minimap_x,
+                            y: minimap_y,
+                        });
+                    }
+                }
+                minimap_x = minimap_x.wrapping_add(1);
+            }
+            minimap_y = minimap_y.wrapping_add(1);
+            minimap_x = 0;
+        }
+        minimap.set_cells_terrain_connect(&wall_array, 0, 0);
+        minimap.set_cells_terrain_connect(&floor_array, 0, 1);
+        // minimap.set_ce
+    }
+
+    #[func]
     pub fn generate_walls(&mut self) {
         let mut child_node = self
             .base()
