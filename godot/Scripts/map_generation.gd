@@ -15,7 +15,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	pass
-	#print(delta)
+	print(delta)
 
 func process_movement():
 	var xy = $Character.position - Vector2(8, 8)

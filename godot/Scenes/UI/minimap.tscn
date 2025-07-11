@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6l5tpnilcba1"]
+
+[ext_resource type="TileSet" uid="uid://byccn7ncl4bcm" path="res://Assets/GodotAssets/minmap.tres" id="1_de23q"]
+[ext_resource type="Script" uid="uid://crw413po8ue64" path="res://Scripts/tile_map_layer.gd" id="2_c7mb3"]
+
+[node name="UI" type="CanvasLayer"]
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(200, 129.325)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -129.0
+offset_bottom = 74.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TileMapLayer" type="TileMapLayer" parent="MarginContainer/PanelContainer"]
+position = Vector2(3, 3)
+tile_set = ExtResource("1_de23q")
+script = ExtResource("2_c7mb3")

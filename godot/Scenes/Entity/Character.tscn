@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://m4v7xo7f5kgf"]
 
 [ext_resource type="Texture2D" uid="uid://b04ketdcqsroi" path="res://Assets/dungeon/frames/knight_f_hit_anim_f0.png" id="1_kx406"]
-[ext_resource type="Script" uid="uid://bygqqxd3t3jau" path="res://character.gd" id="1_kxv2x"]
+[ext_resource type="Script" uid="uid://bygqqxd3t3jau" path="res://Scripts/character.gd" id="1_kxv2x"]
 [ext_resource type="Texture2D" uid="uid://c33qf5mcgxy7f" path="res://Assets/dungeon/frames/knight_f_idle_anim_f0.png" id="2_b014i"]
 [ext_resource type="Texture2D" uid="uid://doighdsskcpc2" path="res://Assets/dungeon/frames/knight_f_idle_anim_f1.png" id="3_kxv2x"]
 [ext_resource type="Texture2D" uid="uid://bgo63yx82kqts" path="res://Assets/dungeon/frames/knight_f_idle_anim_f2.png" id="4_k17t1"]
@@ -53,7 +53,7 @@ animations = [{
 "texture": ExtResource("9_i8md4")
 }],
 "loop": true,
-"name": &"Moving",
+"name": &"Run",
 "speed": 10.0
 }]
 
@@ -133,9 +133,8 @@ script = ExtResource("1_kxv2x")
 z_index = 2
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_7lurk")
-animation = &"Idle"
+animation = &"Run"
 autoplay = "Idle"
-frame_progress = 0.66687
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2)

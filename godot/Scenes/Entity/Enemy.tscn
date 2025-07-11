@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://bp1hnw2xr0mh3"]
+
+[ext_resource type="Texture2D" uid="uid://t3dya3wltxiw" path="res://Assets/dungeon/frames/goblin_idle_anim_f0.png" id="1_7idmm"]
+[ext_resource type="Texture2D" uid="uid://b64j5c26ekvmb" path="res://Assets/dungeon/frames/goblin_idle_anim_f1.png" id="2_283en"]
+[ext_resource type="Texture2D" uid="uid://bij0wf64cve1y" path="res://Assets/dungeon/frames/goblin_idle_anim_f2.png" id="3_nuki6"]
+[ext_resource type="Texture2D" uid="uid://doai2jxs3alt5" path="res://Assets/dungeon/frames/goblin_idle_anim_f3.png" id="4_qm63n"]
+[ext_resource type="Texture2D" uid="uid://c7y0kwjvqlmix" path="res://Assets/dungeon/frames/goblin_run_anim_f0.png" id="5_04msu"]
+[ext_resource type="Texture2D" uid="uid://b8po3mksqarmq" path="res://Assets/dungeon/frames/goblin_run_anim_f1.png" id="6_q4js8"]
+[ext_resource type="Texture2D" uid="uid://b8x4o7bomsi5s" path="res://Assets/dungeon/frames/goblin_run_anim_f2.png" id="7_2i1k6"]
+[ext_resource type="Texture2D" uid="uid://csaoc0nywev86" path="res://Assets/dungeon/frames/goblin_run_anim_f3.png" id="8_hdedl"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jccr3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_7idmm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_283en")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_nuki6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_qm63n")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_04msu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_q4js8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_2i1k6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_hdedl")
+}],
+"loop": true,
+"name": &"Run",
+"speed": 10.0
+}]
+
+[node name="Enemy" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jccr3")
+animation = &"Run"
+autoplay = "Idle"
+frame = 3
+frame_progress = 0.97575

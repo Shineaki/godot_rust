@@ -125,9 +125,9 @@ impl MapGeneratorNode {
         let mut minimap_y = 0;
         for y in player_pos.y - 18..=player_pos.y + 18 {
             for x in player_pos.x - 30..=player_pos.x + 30 {
-                minimap.erase_cell(Vector2i { x: minimap_x, y: minimap_y });
+                // minimap.erase_cell(Vector2i { x: minimap_x, y: minimap_y });
                 if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32{
-                    minimap_x = minimap_x.wrapping_add(1);
+                    minimap_x += 1;
                     continue;
                 }
                 let c_pos = self.map.xy_idx(x, y);
@@ -144,9 +144,9 @@ impl MapGeneratorNode {
                         });
                     }
                 }
-                minimap_x = minimap_x.wrapping_add(1);
+                minimap_x += 1;
             }
-            minimap_y = minimap_y.wrapping_add(1);
+            minimap_y += 1;
             minimap_x = 0;
         }
         minimap.set_cells_terrain_connect(&wall_array, 0, 0);

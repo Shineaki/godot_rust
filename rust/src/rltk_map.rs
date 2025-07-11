@@ -98,9 +98,9 @@ impl Map {
             blocked: vec![false; MAPCOUNT],
         };
 
-        const MAX_ROOMS: i32 = 40;
-        const MIN_SIZE: i32 = 3;
-        const MAX_SIZE: i32 = 7;
+        const MAX_ROOMS: i32 = 50;
+        const MIN_SIZE: i32 = 5;
+        const MAX_SIZE: i32 = 10;
 
         let mut rng = RandomNumberGenerator::new();
 
