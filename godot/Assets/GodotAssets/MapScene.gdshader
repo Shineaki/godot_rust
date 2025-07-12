@@ -1,31 +1,34 @@
-shader_type canvas_item;
-uniform float blue = 1.0;
-// Noise texture
-uniform sampler2D noise_texture: repeat_enable, filter_nearest;
-// Fog density
-uniform float density: hint_range(0.0, 1.0) = 0.25;
-// Fog speed
-uniform vec2 speed = vec2(0.02, 0.01);
+shader_type spatial;
+render_mode unshaded;
+
+uniform sampler2D fog_texture : repeat_disable;
+
+uniform float texSize;
+uniform vec2 world_offset;
+
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+
+varying mat4 CAMERA;
+
 void vertex() {
-	// Called for every vertex the material is visible on.
-	//VERTEX += vec2(cos(TIME)*100.0, sin(TIME)*100.0);
+	POSITION = vec4(VERTEX, 1.0);
+	CAMERA = INV_VIEW_MATRIX;
 }
+
+
 
 void fragment() {
-	// Called for every pixel the material is visible on.
-	vec2 uv = UV + speed * TIME;
-	// Sample the noise texture
-	float noise = texture(noise_texture, uv).r;
-	// Convert the noise from the (0.0, 1.0) range to the (-1.0, 1.0) range
-	// and clamp it between 0.0 and 1.0 again
-	float fog = clamp(noise * 2.0 - 1.0, 0.0, 1.0);
-	// Apply the fog effect
-	//COLOR = vec3(1.0, 1.0, 1.0);
-	COLOR.rgb = vec3(0.0, 0.0, 0.0);
-	COLOR.a *= fog * density;
+    vec4 original_color = textureLod(screen_texture, SCREEN_UV, 0.0);
+	
+	ALBEDO = original_color.rgb;
+	//ALBEDO= vec3(1.0);
+    float depth = textureLod(depth_texture, SCREEN_UV, 0.0).r;
+	vec3 ndc = vec3(SCREEN_UV * 2.0 - 1.0, depth);
+	vec4 world = CAMERA * INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
+	vec3 world_position = world.xyz / world.w;
+	
+	vec2 uv = (world_position.xz-world_offset)/texSize;
+	vec4 texture_fow = texture(fog_texture, uv);
+	ALBEDO = ALBEDO*texture_fow.rgb;
 }
-
-//void light() {
-//	// Called for every pixel for every light affecting the CanvasItem.
-//	// Uncomment to replace the default light processing function with this one.
-//}

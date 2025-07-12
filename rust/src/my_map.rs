@@ -48,7 +48,26 @@ impl MapGeneratorNode {
 
     #[func]
     pub fn is_blocked(&self, x: i32, y: i32) -> bool {
+        if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
+            return true;
+        }
         self.map.blocked[self.map.xy_idx(x, y)]
+    }
+
+    #[func]
+    pub fn is_visible(&self, x: i32, y: i32) -> bool {
+        if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
+            return false;
+        }
+        self.map.visible_tiles[self.map.xy_idx(x, y)]
+    }
+
+    #[func]
+    pub fn is_explored(&self, x: i32, y: i32) -> bool {
+        if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
+            return false;
+        }
+        self.map.revealed_tiles[self.map.xy_idx(x, y)]
     }
 
     #[func]
@@ -183,13 +202,13 @@ impl MapGeneratorNode {
             }
         }
         // Extra coverage around map
-        for y in -20..=MAPHEIGHT as i32 + 20 {
-            for x in -20..=MAPWIDTH as i32 + 20 {
-                if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
-                    wall_array.push(Vector2i { x: x, y: y });
-                }
-            }
-        }
+        // for y in 0..MAPHEIGHT as i32 {
+        //     for x in 0..MAPWIDTH as i32 {
+        //         if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
+        //             wall_array.push(Vector2i { x: x, y: y });
+        //         }
+        //     }
+        // }
         child_node.set_cells_terrain_connect(&wall_array, 0, 0);
         self.map.populate_blocked();
     }

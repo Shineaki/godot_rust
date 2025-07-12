@@ -10,17 +10,22 @@
 [ext_resource type="PackedScene" uid="uid://c6l5tpnilcba1" path="res://Scenes/UI/minimap.tscn" id="8_da8t0"]
 [ext_resource type="Shader" uid="uid://jqhv1vhqxyxc" path="res://Assets/GodotAssets/MapScene.gdshader" id="9_27db1"]
 
-[sub_resource type="ImageTexture" id="ImageTexture_27db1"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_27db1"]
+blend_mode = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4x3fr"]
+render_priority = 0
 shader = ExtResource("9_27db1")
-shader_parameter/blue = 1.0
-shader_parameter/noise_texture = SubResource("ImageTexture_27db1")
-shader_parameter/density = 1.0
-shader_parameter/speed = Vector2(0.185, 0.01)
+shader_parameter/texSize = 0.0
+shader_parameter/world_offset = Vector2(0, 0)
 
 [node name="MapScene" type="Node2D"]
 script = ExtResource("1_fmcg2")
+
+[node name="FOW" type="Sprite2D" parent="."]
+z_index = 10
+material = SubResource("CanvasItemMaterial_27db1")
+centered = false
 
 [node name="Character" parent="." instance=ExtResource("2_27db1")]
 z_index = 5
@@ -46,6 +51,7 @@ tile_set = ExtResource("5_5brsw")
 tile_set = ExtResource("6_ptes7")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="MyRustMap"]
+visible = false
 tile_set = ExtResource("7_vxr05")
 
 [node name="UI" parent="." instance=ExtResource("8_da8t0")]
