@@ -19,7 +19,7 @@ pub enum TileType {
 #[derive(Default)]
 pub struct Map {
     pub tiles: Vec<TileType>,
-    pub rooms: Vec<Rect>,
+    pub rooms: Vec<Rect>, // TODO: Change to Godot rect
     pub width: i32,
     pub height: i32,
     pub revealed_tiles: Vec<bool>,
@@ -107,8 +107,8 @@ impl Map {
         for _i in 0..MAX_ROOMS {
             let w = rng.range(MIN_SIZE, MAX_SIZE);
             let h = rng.range(MIN_SIZE, MAX_SIZE);
-            let x = rng.roll_dice(1, map.width - w - 1) - 1;
-            let y = rng.roll_dice(1, map.height - h - 1) - 1;
+            let x = rng.range(2, map.width - w - 2);// rng.roll_dice(1, map.width - w - 1) - 2;
+            let y = rng.range(2, map.height - h - 2); // rng.roll_dice(1, map.height - h - 1) - 2;
             let new_room = Rect::new(x, y, w, h);
             let mut ok = true;
             for other_room in map.rooms.iter() {

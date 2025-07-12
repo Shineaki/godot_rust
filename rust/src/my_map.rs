@@ -1,4 +1,5 @@
-use godot::classes::INode2D;
+use godot::classes::image::Format;
+use godot::classes::{INode2D, Image, ImageTexture, Sprite2D};
 use godot::classes::{Node2D, TileMapLayer};
 use godot::prelude::*;
 
@@ -11,8 +12,10 @@ use crate::rltk_map::{MAPHEIGHT, MAPWIDTH};
 struct MapGeneratorNode {
     map: Map,
     floor_map: Option<Gd<TileMapLayer>>,
-    shadow_map: Option<Gd<TileMapLayer>>,
     wall_map: Option<Gd<TileMapLayer>>,
+    fov: Option<Gd<Sprite2D>>,
+    fog_image: Gd<Image>,
+    fog_image_texture: Gd<ImageTexture>,
     base: Base<Node2D>,
 }
 
@@ -23,20 +26,42 @@ impl INode2D for MapGeneratorNode {
         Self {
             map: Map::new_map_rooms_and_corridors(),
             floor_map: None,
-            shadow_map: None,
             wall_map: None,
+            fov: None,
+            fog_image: Image::new_gd(),
+            fog_image_texture: ImageTexture::new_gd(),
             base,
         }
     }
     fn ready(&mut self) {
         self.floor_map = self.base().try_get_node_as::<TileMapLayer>("FloorMap");
-        self.shadow_map = self.base().try_get_node_as::<TileMapLayer>("ShadowMap");
         self.wall_map = self.base().try_get_node_as::<TileMapLayer>("WallMap");
+        self.fov = self.base().try_get_node_as::<Sprite2D>("../FOW");
+        self.fog_image =
+            Image::create(100, 80, false, Format::RGBAH).expect("Couldn't create fog image");
+        self.fog_image.fill(Color::BLACK)
     }
 }
 
 #[godot_api]
 impl MapGeneratorNode {
+    pub fn update_fog(&mut self, pos: Vector2i){
+        for y in -8..=8 {
+            for x in -8..=8 {
+                let global_pos = Vector2i {
+                    x: pos.x + x,
+                    y: pos.y + y,
+                };
+                if self.is_visible(global_pos.x, global_pos.y) {
+                    self.fog_image.set_pixel(global_pos.x, global_pos.y, Color { r: 1., g: 1., b: 1., a: 1. });
+                } else if self.is_explored(global_pos.x, global_pos.y) {
+                    self.fog_image.set_pixel(global_pos.x, global_pos.y, Color { r: 0.5, g: 0.5, b: 0.5, a: 1. });
+                }
+            }
+        }
+        self.fog_image_texture = ImageTexture::create_from_image(&self.fog_image).expect("Couldn't create fog texture");
+    }
+
     #[func]
     pub fn get_spawn_point(&self) -> Vector2 {
         let center_ref = self.map.rooms[0].center();
@@ -107,82 +132,11 @@ impl MapGeneratorNode {
     pub fn init_enemies(&mut self) {}
 
     #[func]
-    pub fn init_shadows(&mut self) {
-        let child_node = self.shadow_map.as_mut().unwrap();
-        // Extra coverage around map
-        let mut shadow_array: Array<Vector2i> = Array::new();
-        for y in -12..=MAPHEIGHT as i32 + 12 {
-            for x in -12..=MAPWIDTH as i32 + 12 {
-                shadow_array.push(Vector2i { x: x, y: y });
-            }
-        }
-        child_node.set_cells_terrain_connect(&shadow_array, 0, 0);
-    }
-
-    #[func]
     pub fn generate_shadows(&mut self, player_pos: Vector2i) {
         self.map.update_revealed((player_pos.x, player_pos.y));
-        let child_node = self.shadow_map.as_mut().unwrap();
-        let mut shadow_array: Array<Vector2i> = Array::new();
-
-        for y in player_pos.y - 8..=player_pos.y + 8 {
-            for x in player_pos.x - 8..=player_pos.x + 8 {
-                if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
-                    continue;
-                } else {
-                    child_node.erase_cell(Vector2i { x: x, y: y });
-                    if self.map.visible_tiles[self.map.xy_idx(x, y)] != true {
-                        shadow_array.push(Vector2i { x: x, y: y });
-                    }
-                }
-            }
-        }
-        child_node.set_cells_terrain_connect(&shadow_array, 0, 0);
+        self.update_fog(player_pos);
+        self.fov.as_mut().expect("Couldn't get FOV").set_texture(&self.fog_image_texture);
     }
-
-    // #[func]
-    // pub fn update_minimap(&self, player_pos: Vector2i) {
-    //     let mut minimap = self
-    //         .base()
-    //         .try_get_node_as::<TileMapLayer>("../UI/MarginContainer/PanelContainer/TileMapLayer")
-    //         .unwrap();
-    //     let mut wall_array: Array<Vector2i> = Array::new();
-    //     let mut floor_array: Array<Vector2i> = Array::new();
-    //     let mut minimap_x = 0;
-    //     let mut minimap_y = 0;
-    //     for y in player_pos.y - 18..=player_pos.y + 18 {
-    //         for x in player_pos.x - 30..=player_pos.x + 30 {
-    //             minimap.erase_cell(Vector2i {
-    //                 x: minimap_x,
-    //                 y: minimap_y,
-    //             });
-    //             if x < 0 || x >= MAPWIDTH as i32 || y < 0 || y >= MAPHEIGHT as i32 {
-    //                 minimap_x += 1;
-    //                 continue;
-    //             }
-    //             let c_pos = self.map.xy_idx(x, y);
-    //             if self.map.revealed_tiles[c_pos] == true {
-    //                 if self.map.tiles[c_pos] == TileType::Wall {
-    //                     wall_array.push(Vector2i {
-    //                         x: minimap_x,
-    //                         y: minimap_y,
-    //                     });
-    //                 } else {
-    //                     floor_array.push(Vector2i {
-    //                         x: minimap_x,
-    //                         y: minimap_y,
-    //                     });
-    //                 }
-    //             }
-    //             minimap_x += 1;
-    //         }
-    //         minimap_y += 1;
-    //         minimap_x = 0;
-    //     }
-    //     minimap.set_cells_terrain_connect(&wall_array, 0, 0);
-    //     minimap.set_cells_terrain_connect(&floor_array, 0, 1);
-    //     // minimap.set_ce
-    // }
 
     #[func]
     pub fn generate_walls(&mut self) {
