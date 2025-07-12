@@ -18,6 +18,11 @@ func attack():
 	$Hands/RightHandPosition/AnimationPlayer.play("Attack")
 
 func move(dir: Vector2):
+	var xy = position + dir * TILE_SIZE - Vector2(8, 8)
+	var rounded_xy = Vector2i(round(xy.x / 16), round(xy.y / 16))
+	var blocked = $"../MyRustMap".is_blocked(rounded_xy.x, rounded_xy.y)
+	if blocked:
+		return
 	moving = true
 	TARGET_POSITION = global_position + dir * TILE_SIZE
 	sprite_movement_tween = create_tween()

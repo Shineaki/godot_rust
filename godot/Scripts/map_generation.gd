@@ -10,16 +10,16 @@ func _ready() -> void:
 	var xy = spawn_point - Vector2(8, 8)
 	var rounded_xy = Vector2i(round(xy.x / 16), round(xy.y / 16))
 	$MyRustMap.generate_shadows(rounded_xy)
-	$MyRustMap.update_minimap(rounded_xy)
+	#$MyRustMap.update_minimap(rounded_xy)
 	$Character.moved.connect(process_movement)
 
 func _process(delta: float) -> void:
-	pass
 	print(delta)
+	pass
 
 func process_movement():
 	var xy = $Character.position - Vector2(8, 8)
 	print("process_movement ", xy)
 	var rounded_xy = Vector2i(round(xy.x / 16), round(xy.y / 16))
 	$MyRustMap.generate_shadows(rounded_xy)
-	$MyRustMap.update_minimap(rounded_xy)
+	#$MyRustMap.update_minimap(rounded_xy)ddddddddddddddddd

@@ -139,15 +139,16 @@ impl Map {
             for x in 1..MAPWIDTH as i32 - 1 {
                 let c_coord = map.xy_idx(x, y);
                 if map.tiles[c_coord] == TileType::Wall {
-                    if map.tiles[map.xy_idx(x - 1, y)] == TileType::Floor
-                        && map.tiles[map.xy_idx(x + 1, y)] == TileType::Floor
+                    if (map.tiles[map.xy_idx(x - 1, y)] == TileType::Floor
+                        && map.tiles[map.xy_idx(x + 1, y)] == TileType::Floor)
+                        || (map.tiles[map.xy_idx(x, y - 1)] == TileType::Floor
+                            && map.tiles[map.xy_idx(x, y + 1)] == TileType::Floor)
                     {
                         map.tiles[c_coord] = TileType::Floor;
                     }
                 }
             }
         }
-
         map
     }
 }
@@ -207,37 +208,3 @@ impl Algorithm2D for Map {
         Point::new(self.width, self.height)
     }
 }
-
-// pub fn draw_map(ctx: &mut Rltk) {
-//     let mut y = 0;
-//     let mut x = 0;
-//     for (idx, tile) in map.tiles.iter().enumerate() {
-//         // Render a tile depending upon the tile type
-
-//         if map.revealed_tiles[idx] {
-//             let glyph;
-//             let mut fg;
-//             match tile {
-//                 TileType::Floor => {
-//                     glyph = rltk::to_cp437('.');
-//                     fg = RGB::from_f32(0.0, 0.5, 0.5);
-//                 }
-//                 TileType::Wall => {
-//                     glyph = rltk::to_cp437('#');
-//                     fg = RGB::from_f32(0., 1.0, 0.);
-//                 }
-//             }
-//             if !map.visible_tiles[idx] {
-//                 fg = fg.to_greyscale()
-//             }
-//             ctx.set(x, y, fg, RGB::from_f32(0., 0., 0.), glyph);
-//         }
-
-//         // Move the coordinates
-//         x += 1;
-//         if x > MAPWIDTH as i32 - 1 {
-//             x = 0;
-//             y += 1;
-//         }
-//     }
-// }
