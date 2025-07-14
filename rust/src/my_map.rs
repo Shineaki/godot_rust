@@ -10,6 +10,12 @@ use crate::rltk_map::{MAPHEIGHT, MAPWIDTH};
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 struct MapGeneratorNode {
+
+
+    // A git jo
+
+
+
     map: Map,
     floor_map: Option<Gd<TileMapLayer>>,
     wall_map: Option<Gd<TileMapLayer>>,
