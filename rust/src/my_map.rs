@@ -37,9 +37,8 @@ impl INode2D for MapGeneratorNode {
         self.floor_map = self.base().try_get_node_as::<TileMapLayer>("FloorMap");
         self.wall_map = self.base().try_get_node_as::<TileMapLayer>("WallMap");
         self.fov = self.base().try_get_node_as::<Sprite2D>("../FOW");
-        self.fog_image =
-            Image::create(100, 80, false, Format::RGBAH).expect("Couldn't create fog image");
-        self.fog_image.fill(Color::BLACK)
+        self.fog_image = Image::create(100, 80, false, Format::RGBAH).expect("Couldn't create fog image");
+        self.fog_image.fill(Color::BLACK);
     }
 }
 
@@ -53,6 +52,7 @@ impl MapGeneratorNode {
                     y: pos.y + y,
                 };
                 if self.is_visible(global_pos.x, global_pos.y) {
+                    // let float_val = std::cmp::min(y.abs() * x.abs(), 1);
                     self.fog_image.set_pixel(global_pos.x, global_pos.y, Color { r: 1., g: 1., b: 1., a: 1. });
                 } else if self.is_explored(global_pos.x, global_pos.y) {
                     self.fog_image.set_pixel(global_pos.x, global_pos.y, Color { r: 0.5, g: 0.5, b: 0.5, a: 1. });
