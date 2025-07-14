@@ -11,11 +11,7 @@ use crate::rltk_map::{MAPHEIGHT, MAPWIDTH};
 #[class(base=Node2D)]
 struct MapGeneratorNode {
 
-
-
-    // A git szar
-
-
+    // A git okes
 
     map: Map,
     floor_map: Option<Gd<TileMapLayer>>,
