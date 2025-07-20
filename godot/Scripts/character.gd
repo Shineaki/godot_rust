@@ -77,7 +77,3 @@ func _process(delta: float) -> void:
 	if $AnimatedSprite2D.flip_h != (move_direction < 0):
 		$Hands.scale.x *= -1
 		$AnimatedSprite2D.flip_h = (move_direction < 0)
-	#var mouse_pos = get_global_mouse_position()
-	#if $AnimatedSprite2D.flip_h != (mouse_pos.x < position.x):
-		#$Hands.scale.x *= -1
-		#$AnimatedSprite2D.flip_h = mouse_pos.x < position.x

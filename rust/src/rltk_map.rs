@@ -107,8 +107,8 @@ impl Map {
         for _i in 0..MAX_ROOMS {
             let w = rng.range(MIN_SIZE, MAX_SIZE);
             let h = rng.range(MIN_SIZE, MAX_SIZE);
-            let x = rng.range(2, map.width - w - 2);// rng.roll_dice(1, map.width - w - 1) - 2;
-            let y = rng.range(2, map.height - h - 2); // rng.roll_dice(1, map.height - h - 1) - 2;
+            let x = rng.range(2, map.width - w - 2);
+            let y = rng.range(2, map.height - h - 2);
             let new_room = Rect::new(x, y, w, h);
             let mut ok = true;
             for other_room in map.rooms.iter() {
